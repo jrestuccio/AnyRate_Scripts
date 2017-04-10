@@ -1,13 +1,17 @@
 require 'rubygems'
 require 'mechanize'
-require 'rubygems'
-require 'selenium-webdriver'
+# require 'rubygems'
+# require 'selenium-webdriver'
 require 'watir'
-require 'watir-webdriver'
-require 'phantomjs'
+# require 'phantomjs'
+
+# Dependencies / Install Notes
+# 1. Must download geckodriver.exe for selenium-webdriver
+# 2. Must install Xvfb in order to use Headless Gem
 
 # test params
 # ruby watir_1030.rb memca 04/12/2017 04/14/2017 USD
+puts "test"
 
 # declare arguments
 ARGV.each do|a|
@@ -19,7 +23,12 @@ start_date = ARGV[1]
 end_date = ARGV[2]
 currency = ARGV[3]
 
-browser = Watir::Browser.new
+begin
+  browser = Watir::Browser.new :phantomjs
+rescue Exception => e
+  puts e
+end
+
 browser.goto "https://www.marriott.com/reservation/availability.mi?propertyCode=#{property_code}&isRateCalendar=false"
 
 browser.text_field(:id, 'fromDate').set(start_date)
@@ -75,4 +84,4 @@ all_rate_results.each do |rf|
   rates_results.puts rate_results_text
 end # all_rate_results.each
 rates_results.close()
-browser.close
+# browser.close
